@@ -1,11 +1,13 @@
-import kivy
+
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.button import Button
-from kivy.uix.filechooser import FileChooserIconView;
+from kivy.uix.filechooser import FileChooserIconView
 from kivy.uix.image import Image
 from kivy.uix.popup import Popup
+from kivy.utils import platform
+
 import shutil
 
 class ImageUpload(App):
@@ -43,8 +45,13 @@ class ImageUpload(App):
         self.uploadButton.bind(on_press=self.uploadImage)
         self.layout.add_widget(self.uploadButton)
 
+
     def build(self):
         self.layout = BoxLayout(orientation='vertical', spacing=10)
+        if platform == "android":
+            self.testLabel = Label(text='test', size_hint=(1, 0.2))
+            from android.permissions import request_permissions, Permission
+            request_permissions([Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE])
         self.welcomeLabel = Label(text="Hey, I\'m here to help you \n please uplaod your table", size_hint=(1,0.2))
         self.layout.add_widget(self.welcomeLabel)
         self.chooseButton = Button(text="Choose Image", size_hint=(1,0.1))
