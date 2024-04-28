@@ -1,13 +1,28 @@
 from flask import Flask, render_template, request, redirect, url_for
 from werkzeug.utils import secure_filename
-app = Flask(__name__, template_folder='template')
+from actions.indentifiers.indenty import sayHello
 
-app.secret_key = 'secretKeyT'
+# TODO hide behind a lock
+uid_counter = 1
+
+app = Flask(__name__,
+            static_folder='web/static',
+            template_folder='web/template')
 
 @app.route('/')
-def welcome():
-    return render_template('welcome.html')
-@app.route('/', methods=['POST'])
+def getHomePage():
+    sayHello()
+    return render_template('index.html')
+
+@app.route('/get-uid/')
+def get_uid():
+    global uid_counter
+    uid_counter += 1
+    return {'uid': uid_counter - 1}
+
+
+
+@app.route('/upload_picture/', methods=['POST'])
 def upload_picture():
     uploaded_picture = request.files.get('picture')
     if uploaded_picture:
@@ -16,14 +31,10 @@ def upload_picture():
             return render_template('confirm.html', image_tablePicture='uploads/uploaded_picture')
         else:
             return "please upload an image!"
-    else:
-        return "please choose a picture!"
-@app.route('/confirm/<tablePicture>', methods=["POST"])
-def confirm(tablePicture):
-    confirmation = request.form.get('confirmation')
-    if confirmation == "yes":
-        return f"image {tablePicture} has been confirmed!"
-    else:
-        return redirect(render_template('welcome.html'))
-if __name__ == '__main__':
+    return "please choose a picture!"
+    
+def main():
     app.run(debug=True)
+
+if __name__ == '__main__':
+    main()
