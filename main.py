@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 from werkzeug.utils import secure_filename
 from actions.indentifiers.indenty import sayHello
 
@@ -21,17 +21,14 @@ def get_uid():
     return {'uid': uid_counter - 1}
 
 
-
 @app.route('/upload_picture/', methods=['POST'])
 def upload_picture():
     uploaded_picture = request.files.get('picture')
-    if uploaded_picture:
-        if uploaded_picture.mimetype.startswith('image/'):
-            uploaded_picture.save(f'/uploads{secure_filename(uploaded_picture.filename)}')
-            return render_template('confirm.html', image_tablePicture='uploads/uploaded_picture')
-        else:
-            return "please upload an image!"
-    return "please choose a picture!"
+    if uploaded_picture and uploaded_picture.mimetype.startswith('image/'):
+        uploaded_picture.save(f'uploads//{secure_filename(uploaded_picture.filename)}')
+        return redirect('/', 200)
+    
+    return "internal error."
     
 def main():
     app.run(debug=True)
