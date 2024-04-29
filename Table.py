@@ -5,8 +5,8 @@ from Spot import Spot
 from collections import defaultdict
 
 NEARBY_SCORE = 1.0
-ACROSS_SCORE = 0.5
-FAR_SCORE = -1.0
+ACROSS_SCORE = 0.6
+FAR_SCORE = 0.0
 PURPLE = (255, 0, 255)
 GREEN = (0, 255, 0)
 YELLOW = (0, 255, 255)
@@ -46,14 +46,14 @@ class Table(object):
             distances.sort(key=lambda x: x[1])
             nearest_spot_1 = distances[0][0]
             nearest_spot_2 = distances[1][0]
-            relations[spot_index] = [(nearest_spot_1, NEARBY_SCORE), (nearest_spot_2, NEARBY_SCORE)]
+            relations[spot_index] = {nearest_spot_1: NEARBY_SCORE, nearest_spot_2: NEARBY_SCORE}
 
             for other_index, _ in distances[2:]:
                 other = spots[other_index]
                 if spot.is_across(other):
-                    relations[spot_index].append((other_index, ACROSS_SCORE))
+                    relations[spot_index][other_index] = ACROSS_SCORE
                 else:
-                    relations[spot_index].append((other_index, FAR_SCORE))
+                    relations[spot_index][other_index] = FAR_SCORE
         return relations
 
     def get_relations_on_image(self):
@@ -61,7 +61,8 @@ class Table(object):
         for spot_index, rels in self.relations.items():
             spot = self.spots[spot_index]
             cv2.circle(orig, spot.location, 5, PURPLE, cv2.FILLED)
-            for other_index, score in rels:
+            cv2.putText(orig, f"{spot_index}", spot.location, cv2.FONT_HERSHEY_COMPLEX, 0.7, (0, 0, 0), 2)
+            for other_index, score in rels.items():
                 other = self.spots[other_index]
                 if score == NEARBY_SCORE:
                     cv2.line(orig, spot.location, other.location, GREEN, 2)
@@ -69,3 +70,6 @@ class Table(object):
                     cv2.line(orig, spot.location, other.location, YELLOW, 2)
 
         return orig
+
+    def get_relation_between(self, spot_id_1, spot_id_2):
+        return self.relations[spot_id_1][spot_id_2]

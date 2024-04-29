@@ -4,6 +4,8 @@ from Table import *
 
 if __name__ == '__main__':
     table = Table("Images/table8NoMap.jpg")
+    print(table.relations)
+
     rel_img = table.get_relations_on_image()
     title_window = "relations"
     cv2.namedWindow(title_window)
