@@ -1,12 +1,14 @@
-from Spot import Spot
-from Table import Table
+import cv2
+
+from Table import *
 
 if __name__ == '__main__':
-    sp = Spot(100, 200, "dad")
-    su = Spot(300, 400, "uri")
-    tb = Table("Images/tableFor3.jpeg")
-    tb.add_spot(sp)
-    tb.add_spot(su)
-    tb.add_connection(sp, su)
-    print(tb)
+    table = Table("Images/table8NoMap.jpg")
+    rel_img = table.get_relations_on_image()
+    title_window = "relations"
+    cv2.namedWindow(title_window)
+    cv2.imshow(title_window, rel_img)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
 
