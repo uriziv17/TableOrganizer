@@ -13,9 +13,10 @@
    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
    <nav class="navbar navbar-light bg-light">
     <a class="navbar-brand" href="#">
-      <img src="assets/bigLogo.png" width="30" height="30" alt="Table Organizer">
+      <img src="D:\Documents\GitHub\TableOrganizer\web\static\assets\bigLogo.png" width="30" height="30" alt="Table Organizer">
     </a>
-  </nav>  
+  </nav> 
+  {% block content %} 
   <p>please upload your table's picture below:</p>
   <form action="/upload_picture" method="POST" enctype="multipart/form-data">
     <input type="file" name="picture" accept="image/*">
@@ -23,5 +24,6 @@
     <button type="submit">Upload picture</button>
   </form>
   <script src="static/js/index.js"></script>
+  {% endblock content %}
 </body>
 </html>
