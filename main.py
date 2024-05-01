@@ -1,6 +1,7 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from werkzeug.utils import secure_filename
+from actions.indentifiers.indenty import sayHello
 from Table import Table
 from actions.relaxtionLabel.relaxtion import updatePersonsMatrix, setPersonsMatrix, findSitting
 
@@ -19,6 +20,7 @@ names_counter = 0
 person_matrix = None
 @app.route('/')
 def getHomePage():
+    sayHello()
     return render_template('index.html')
 
 @app.route('/get-uid/')
@@ -55,7 +57,7 @@ def add_name_to_list(name):
     return script
 @app.route('/add_names/', methods=['GET', 'POST'])
 def add_names():
-    global names_counter, person_matrix
+    global names_counter
     if request.method == 'GET':
         return render_template('addNames.html')  # Render name collection page
     else:
@@ -74,22 +76,21 @@ def add_names():
                 print("there are to many guests for this table")
                 names_dict.clear()
                 return redirect('/preferences')
-            person_matrix = setPersonsMatrix(THE_TABLE)
             return redirect('/preferences', 200)  # Redirect to table details
         return redirect('/add_names')  # Redirect back to name collection page
 
 @app.route('/preferences', methods=['GET', 'POST'])
 def preferences():
     global names_dict, person_matrix
+    person_matrix = setPersonsMatrix(THE_TABLE)
     if request.method == 'GET':
-        return render_template('addCons.html', names=names_dict.values()) # Render seating preference page
+        return render_template('addCons.html', names=names_dict.keys())  # Render seating preference page
     else:
-        p1index = request.form.get('name1')
-        p2index = request.form.get('name2')
+        p1index = int(request.form.get('name1'))
+        p2index = int(request.form.get('name2'))
         preference = request.form.get('preference')
-        print(p1index, " ", p2index, " ", preference)
         if p1index == p2index:
-            return render_template('addCons.html', names=names_dict.values(), error="Please select two diffrent names")
+            return render_template('addCons.html', names=names_dict.keys(), error="Please select two diffrent names")
         else:
             isLike = 'like' == preference
             updatePersonsMatrix(person_matrix, p1index, p2index, isLike)
