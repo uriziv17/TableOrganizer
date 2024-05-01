@@ -15,7 +15,7 @@ class PlateDetector(object):
         threshold=180,
         canny_upper=150,
         canny_lower=50,
-        circularity_c=0.87,
+        circularity_c=0.75,
         show=False,
     ):
         # preprocess

@@ -105,7 +105,7 @@ class Table(object):
                 2,
             )
         try:
-            cv2.imwrite(orig, save_path)
+            cv2.imwrite(save_path, orig)
             return True
         except IOError:
             print(f"ERROR: failed to save result image to {save_path}")
