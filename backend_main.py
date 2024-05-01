@@ -11,7 +11,7 @@ if __name__ == "__main__":
         0: "uri",
         1: "mom",
         2: "michal",
-        3: "clair",
+        3: "claire",
         4: "daniel",
         5: "nuriel",
         6: "ben",

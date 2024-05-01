@@ -12,7 +12,7 @@ class PlateDetector(object):
         image_path,
         min_area=1800,
         scale_by=0.5,
-        threshold=180,
+        threshold=172,
         canny_upper=150,
         canny_lower=50,
         circularity_c=0.75,
@@ -86,16 +86,16 @@ class PlateDetector(object):
         if show:
             img_cont = image.copy()
             cv2.drawContours(img_cont, contours, -1, (0, 255, 0), 2)
-            _, axes = plt.subplots(1, 4, figsize=(20, 20))
-            for ax, img, title in zip(
-                axes.flatten(),
-                [thresh, can, img_cont, orig],
-                ["threshold", "canny", "contours", "detector"],
-            ):
-                ax.imshow(img, cmap="gray")
-                ax.set_title(title)
+            # _, axes = plt.subplots(1, 4, figsize=(20, 20))
+            # for ax, img, title in zip(
+            #     axes.flatten(),
+            #     [thresh, can, img_cont[:, :, ::-1], orig[:, :, ::-1]],
+            #     ["threshold", "canny", "contours", "detector"],
+            # ):
+            #     ax.imshow(img, cmap="gray")
+            #     ax.set_title(title)
             # return orig
-            # plt.figure()
-            # plt.imshow(orig[:, :, ::-1], aspect="equal")
+            plt.figure(figsize=(12, 16))
+            plt.imshow(orig[:, :, ::-1], aspect="equal")
         return found_plates
         # return sorted(found_plates, key=lambda x: x["area"], reverse=True)
