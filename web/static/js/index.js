@@ -12,4 +12,11 @@
     }
 
     get_uid();
+
+     function addNameToList(name) {
+        const list = document.getElementById('nameList');
+        const listItem = document.createElement('li');
+        listItem.textContent = name;
+        list.appendChild(listItem);
+    }
 }());

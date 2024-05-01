@@ -13,7 +13,9 @@ app = Flask(__name__,
 
 app.config['UPLOAD_FOLDER'] = os.path.join('web', 'static', 'uploads')
 
-THE_TABLE = None
+THE_TABLE:Table = None
+names_dict = {}
+names_counter  = 0
 
 @app.route('/')
 def getHomePage():
@@ -46,10 +48,40 @@ def upload_picture():
 @app.route('/table_details', methods=['GET'])
 def table_details():
     global THE_TABLE
-    return render_template('tableDetails.html', table=THE_TABLE)
+    #render_template('tableDetails.html', table=THE_TABLE)
+    return redirect('/add_names',200)
+
+def add_name_to_list(name):
+    script = f"<script>addNameToList('{name}');</script>"
+    return script
+@app.route('/add_names/', methods=['GET', 'POST'])
+def add_names():
+    global names_counter
+    if request.method == 'GET':
+        return render_template('addNames.html')  # Render name collection page
+    else:
+        name = request.form.get('name')
+        if name:
+            names_dict[names_counter] = name  # Add name to dictionary
+            print(f"Name added: {name}")
+
+            # Call JavaScript function to add name to the list
+            add_name_to_list(name)
+            names_counter += 1
+            print (names_dict)
+
+        if 'done' in request.form:  # Check if "Done" button is pressed
+            if len(names_dict)>len(THE_TABLE.spots):
+                print("there are to many guests for this table")
+                names_dict.clear()
+                return redirect('/add_names')
+            return redirect('/table_details', 200)  # Redirect to table details
+        return redirect('/add_names')  # Redirect back to name collection page
+
 
 def main():
     app.run(debug=True)
+
 
 if __name__ == '__main__':
     main()
