@@ -6,7 +6,6 @@ from actions.relaxtionLabel.relaxtion import updatePersonsMatrix, setPersonsMatr
 
 # TODO hide behind a lock
 uid_counter = 1
-
 app = Flask(__name__,
             static_folder='web/static',
             template_folder='web/template')
@@ -17,6 +16,7 @@ THE_TABLE:Table = None
 names_dict = {}
 names_counter = 0
 person_matrix = None
+num=0
 @app.route('/')
 def getHomePage():
     return render_template('index.html')
