@@ -90,7 +90,10 @@ class Table(object):
 
     def populate_spots(self, names_ids, sitting_arrangement):
         for spot_index, id in enumerate(sitting_arrangement):
-            name = names_ids[id]
+            if names_ids.get(id):
+                name = names_ids[id]
+            else:
+                name = "no one"
             self.spots[spot_index].person = name
 
     def draw_sitting_arrangement(self, save_path):

@@ -17,7 +17,7 @@
    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
   <nav class="navbar navbar-light bg-light">
     <a class="navbar-brand" href="#">
-      <img src="D:\Documents\GitHub\TableOrganizer\web\static\assets\bigLogo.png" width="30" height="30" alt="Table Organizer">
+      <img src="static/assets/logoTable.png" width="100" height="100" alt="Table Organizer">
     </a>
   </nav>
   <p>Select two names and their seating preference:</p>
@@ -28,11 +28,13 @@
 
   <form action="/preferences" method="POST">
     <select name="name1">
-  {% for name in names  %}  <option value="{{ index }}">{{ name }}</option>
+  {% for index, name in names_dict.items()  %}
+    <option value="{{ index }}">{{ name }}</option>
   {% endfor %}
 </select>
 <select name="name2">
-  {% for name in names %}  <option value="{{ index }}">{{ name }}</option>
+  {% for index, name in names_dict.items() %}  
+    <option value="{{ index }}">{{ name }}</option>
   {% endfor %}
 </select>
     <br>
