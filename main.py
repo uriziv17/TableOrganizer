@@ -78,7 +78,7 @@ def add_name_to_list(name):
 
 @app.route('/add_names/', methods=['GET', 'POST'])
 def add_names():
-    global names_counter, person_matrix
+    global names_counter
     if request.method == 'GET':
         return render_template('addNames.html')  # Render name collection page
     else:
@@ -97,7 +97,6 @@ def add_names():
                 print("there are to many guests for this table")
                 names_dict.clear()
                 return redirect('/preferences')
-            person_matrix = setPersonsMatrix(THE_TABLE)
             return redirect('/preferences', 200)  # Redirect to table details
         return redirect('/add_names')  # Redirect back to name collection page
 
@@ -124,6 +123,7 @@ def preferences():
         #     updatePersonsMatrix(person_matrix, p1index, p2index, isLike)
         #     if 'done' in request.form:
         #         findSitting(THE_TABLE, person_matrix)
+
 
 
 def main():
