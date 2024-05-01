@@ -16,15 +16,14 @@ if __name__ == "__main__":
         6: "ben",
         7: "dad",
     }
-    person_matrix = np.zeros((len(people), len(people)))
-    for i in range(len(people)):
-        for j in range(i + 1):
-            if i == j:
-                person_matrix[i][j] = 0.5  # Diagonal elements
-            else:
-                person_matrix[i][j] = person_matrix[j][i] = np.random.choice(
-                    [0.0, 0.5, 1.0], 1, p=[0.25, 0.5, 0.25]
-                )[0]
+    person_matrix =[[0.5,1,1,0,0.5,0.5,0,1],
+                    [1,0.5,0,1,0,0.5,0.5,0],
+                    [1,0,0.5,0.5,0.5,0,1,1],
+                    [0,1,0.5,0.5,0.5,1,0.5,0.5],
+                    [0.5,0,0.5,0.5,0.5,1,0.5,1],
+                    [0.5,0.5,0,1,1,0.5,0,0.5],
+                    [0,0.5,1,0.5,0.5,0,0.5,0.5],
+                    [1,0,1,0.5,1,0.5,0.5,0.5]]
 
     want = set()
     dont_want = set()

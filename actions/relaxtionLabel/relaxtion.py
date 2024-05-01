@@ -45,7 +45,6 @@ def updatePrMatrix(table, prMatrix, personsMatrix):
         for i in range(numRows):
             update = res[spot][i] / res_denominator
             prMatrix[spot][i] = update
-    print(prMatrix, "after update ")
 
 
 def calculateR(table: Table, personsMatrix, person1, spot1, person2, spot2):
@@ -58,7 +57,7 @@ def calculateR(table: Table, personsMatrix, person1, spot1, person2, spot2):
         return 0
     else:
         return abs(
-            0.9
+            0.99999999999
             - abs(
                 personsMatrix[person1][person2]
                 - table.get_relation_between(spot1, spot2)
@@ -80,7 +79,7 @@ def calculateSupport(table, personsMatrix, person1, spot1, prMatrix):
 
 def findSitting(table: Table, personsMatrix):
     prMatrix = setPrMatrix(table)
-    for i in range(5):
+    for i in range(100):
         updatePrMatrix(table, prMatrix, personsMatrix)
 
     seatingArr = []
@@ -92,7 +91,5 @@ def findSitting(table: Table, personsMatrix):
         seatingArr.append(person)
         for l in range(i+1, len(table.spots)):
             prMatrix[l][person] = 0
-        print(prMatrix, "after removing person ",person)
-        print(currSpotPr, "test current spot")
     print(seatingArr)
     return seatingArr
