@@ -29,7 +29,7 @@ def updatePersonsMatrix(personsMatrix, person1, person2, like):
 
 
 def updatePrMatrix(table, prMatrix, personsMatrix):
-    numLabels, numRows, numColumns = prMatrix.shape
+    numRows, numColumns = len(prMatrix), len(prMatrix)
     res = np.zeros_like(prMatrix)
     for spot in range(numRows):
         res_denominator = 0
@@ -81,4 +81,4 @@ def findSitting(table: Table, personsMatrix):
     seatingArr = []
     for i in range(len(table.spots)):
         seatingArr[i] = prMatrix.index(max(prMatrix[i]))
-    print (seatingArr)
+    print(seatingArr)
