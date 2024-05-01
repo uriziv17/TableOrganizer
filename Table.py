@@ -13,11 +13,12 @@ YELLOW = (0, 255, 255)
 
 
 class Table(object):
-    def __init__(self, image_path, scale_by=0.5):
+    def __init__(self, image_path, scale_by=0.5, thresh=172):
         self.image_path = image_path
         self.image = cv2.imread(image_path)
         self.scale = scale_by
         self.image = cv2.resize(self.image, (0, 0), fx=scale_by, fy=scale_by)
+        self.thresh = thresh
         self.spots = self.extract_spots()
         self.relations = self.build_relations(self.spots)
 
@@ -30,7 +31,7 @@ class Table(object):
         :return:
         """
         found_contours = PlateDetector.detect_plates(
-            self.image_path, scale_by=self.scale
+            self.image_path, threshold=self.thresh, scale_by=self.scale
         )
         spots = {}
         for i in range(len(found_contours)):
@@ -105,7 +106,7 @@ class Table(object):
                 2,
             )
         try:
-            cv2.imwrite(orig, save_path)
+            cv2.imwrite(save_path, orig)
             return True
         except IOError:
             print(f"ERROR: failed to save result image to {save_path}")
