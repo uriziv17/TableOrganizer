@@ -1,7 +1,6 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from werkzeug.utils import secure_filename
-from actions.indentifiers.indenty import sayHello
 from Table import Table
 from actions.relaxtionLabel.relaxtion import updatePersonsMatrix, setPersonsMatrix, findSitting
 
@@ -20,7 +19,6 @@ names_counter = 0
 person_matrix = None
 @app.route('/')
 def getHomePage():
-    sayHello()
     return render_template('index.html')
 
 @app.route('/get-uid/')
