@@ -2,7 +2,7 @@ import math
 
 
 class Spot(object):
-    def __init__(self, id, center_point, bbox, person=None):
+    def __init__(self, id, center_point, bbox, person="empty"):
         self.id = id
         self.location = center_point
         self.bounding_box = bbox # [x,y,w,h]
