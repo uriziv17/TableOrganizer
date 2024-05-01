@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pair Preference Form</title>
+    <script>
+        function addPair() {
+            var container = document.getElementById('pairs-container');
+            var newPair = document.createElement('div');
+            newPair.innerHTML = `
+                <div class="pair">
+                    <label>Person 1:</label>
+                    <input type="text" name="pairs-{{ loop.index0 }}-name1" required>
+                    <label>Person 2:</label>
+                    <input type="text" name="pairs-{{ loop.index0 }}-name2" required>
+                    <label>Like:</label>
+                    <select name="pairs-{{ loop.index0 }}-like" required>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>`;
+            container.appendChild(newPair);
+        }
+    </script>
+</head>
+<body>
+    <h1>Pair Preference Form</h1>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div id="pairs-container">
+            {% for pair in form.pairs %}
+                <div class="pair">
+                    {{ pair.name1.label }} {{ pair.name1(size=20) }}
+                    {{ pair.name2.label }} {{ pair.name2(size=20) }}
+                    {{ pair.like.label }} {{ pair.like() }}
+                </div>
+            {% endfor %}
+        </div>
+        <button type="button" onclick="addPair()">Add Pair</button>
+        <p>{{ form.submit() }}</p>
+    </form>
+</body>
+</html>
