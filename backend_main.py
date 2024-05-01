@@ -39,4 +39,5 @@ if __name__ == "__main__":
     print(dont_want)
 
     arrangement = findSitting(table, person_matrix)
-    print(list(enumerate(arrangement)))
+    table.populate_spots(people, arrangement)
+    table.draw_sitting_arrangement("result.jpeg")
