@@ -19,4 +19,15 @@
         listItem.textContent = name;
         list.appendChild(listItem);
     }
+
+    function highlightSelected() {
+        const selectedName = document.querySelector('.selected-name option:selected');
+        if (selectedName) {
+            selectedName.classList.add('highlighted');  // Add "highlighted" class
+        }
+        const previouslySelected = document.querySelector('.selected-name.highlighted');
+        if (previouslySelected) {
+            previouslySelected.classList.remove('highlighted');  // Remove from previous selection
+        }
+}
 }());

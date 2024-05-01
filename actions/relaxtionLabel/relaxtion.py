@@ -81,3 +81,4 @@ def findSitting(table: Table, personsMatrix):
     seatingArr = []
     for i in range(len(table.spots)):
         seatingArr[i] = prMatrix.index(max(prMatrix[i]))
+    print (seatingArr)

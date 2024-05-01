@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify
 from werkzeug.utils import secure_filename
 from actions.indentifiers.indenty import sayHello
 from Table import Table
+from actions.relaxtionLabel.relaxtion import updatePersonsMatrix, setPersonsMatrix, findSitting
 
 # TODO hide behind a lock
 uid_counter = 1
@@ -15,8 +16,8 @@ app.config['UPLOAD_FOLDER'] = os.path.join('web', 'static', 'uploads')
 
 THE_TABLE:Table = None
 names_dict = {}
-names_counter  = 0
-
+names_counter = 0
+person_matrix = None
 @app.route('/')
 def getHomePage():
     sayHello()
@@ -39,7 +40,7 @@ def upload_picture():
             filename = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(uploaded_picture.filename))
             uploaded_picture.save(filename)
             THE_TABLE = Table(filename)
-            return redirect('/table_details', 200)
+            return redirect('/add_names', 200)
         except IOError:
             return "<p> internal server file error :( </p>"
     
@@ -74,10 +75,27 @@ def add_names():
             if len(names_dict)>len(THE_TABLE.spots):
                 print("there are to many guests for this table")
                 names_dict.clear()
-                return redirect('/add_names')
-            return redirect('/table_details', 200)  # Redirect to table details
+                return redirect('/preferences')
+            return redirect('/preferences', 200)  # Redirect to table details
         return redirect('/add_names')  # Redirect back to name collection page
 
+@app.route('/preferences', methods=['GET', 'POST'])
+def preferences():
+    global names_dict, person_matrix
+    person_matrix = setPersonsMatrix(THE_TABLE)
+    if request.method == 'GET':
+        return render_template('addCons.html', names=names_dict.keys())  # Render seating preference page
+    else:
+        p1index = int(request.form.get('name1'))
+        p2index = int(request.form.get('name2'))
+        preference = request.form.get('preference')
+        if p1index == p2index:
+            return render_template('addCons.html', names=names_dict.keys(), error="Please select two diffrent names")
+        else:
+            isLike = 'like' == preference
+            updatePersonsMatrix(person_matrix, p1index, p2index, isLike)
+            if 'done' in request.form:
+                findSitting(THE_TABLE, person_matrix)
 
 def main():
     app.run(debug=True)
