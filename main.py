@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, redirect, url_for, jsonify, flash
 from werkzeug.utils import secure_filename
 from Table import Table
 from actions.relaxtionLabel.relaxtion import updatePersonsMatrix, setPersonsMatrix, findSitting
@@ -61,6 +61,10 @@ def add_names():
     else:
         name = request.form.get('name')
         if name:
+            if len(names_dict)+1 > len(THE_TABLE.spots):
+                print("there are to many guests for this table")
+                names_dict.clear()
+                return redirect('/add_names')
             names_dict[names_counter] = name  # Add name to dictionary
             print(f"Name added: {name}")
 
@@ -70,10 +74,6 @@ def add_names():
             print (names_dict)
 
         if 'done' in request.form:  # Check if "Done" button is pressed
-            if len(names_dict)>len(THE_TABLE.spots):
-                print("there are to many guests for this table")
-                names_dict.clear()
-                return redirect('/preferences')
             return redirect('/preferences', 200)  # Redirect to table details
         return redirect('/add_names')  # Redirect back to name collection page
 
@@ -81,19 +81,19 @@ def add_names():
 def preferences():
     global names_dict, person_matrix
     person_matrix = setPersonsMatrix(THE_TABLE)
-    if request.method == 'GET':
-        return render_template('addCons.html', names=names_dict.keys())  # Render seating preference page
+   # if request.method == 'GET':
+    return render_template('addCons.html', names=names_dict.values())  # Render seating preference page
+    #else:
+    p1index = int(request.form.get('name1'))
+    p2index = int(request.form.get('name2'))
+    preference = request.form.get('preference')
+    if p1index == p2index:
+        return render_template('addCons.html', names=names_dict.values(), error="Please select two diffrent names")
     else:
-        p1index = int(request.form.get('name1'))
-        p2index = int(request.form.get('name2'))
-        preference = request.form.get('preference')
-        if p1index == p2index:
-            return render_template('addCons.html', names=names_dict.keys(), error="Please select two diffrent names")
-        else:
-            isLike = 'like' == preference
-            updatePersonsMatrix(person_matrix, p1index, p2index, isLike)
-            if 'done' in request.form:
-                findSitting(THE_TABLE, person_matrix)
+        isLike = 'like' == preference
+        updatePersonsMatrix(person_matrix, p1index, p2index, isLike)
+        if 'done' in request.form:
+            findSitting(THE_TABLE, person_matrix)
 
 def main():
     app.run(debug=True)

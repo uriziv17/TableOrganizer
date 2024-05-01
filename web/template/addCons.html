@@ -27,12 +27,12 @@
   {% endif %}
 
   <form action="/preferences" method="POST">
-    <select name="name1" class="selected-name" onchange="highlightSelected()">
-  {% for name, index in names.items() %}  <option value="{{ index }}">{{ name }}</option>
+    <select name="name1">
+  {% for name in names  %}  <option value="{{ index }}">{{ name }}</option>
   {% endfor %}
 </select>
 <select name="name2">
-  {% for name, index in names.items() %}  <option value="{{ index }}">{{ name }}</option>
+  {% for name in names %}  <option value="{{ index }}">{{ name }}</option>
   {% endfor %}
 </select>
     <br>
