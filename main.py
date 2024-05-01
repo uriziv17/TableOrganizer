@@ -40,11 +40,11 @@ def getHomePage():
     return render_template('index.html')
 
 
-# @app.route('/get-uid/')
-# def get_uid():
-#     global uid_counter
-#     uid_counter += 1
-#     return {'uid': uid_counter - 1}
+@app.route('/get-uid/')
+def get_uid():
+    global uid_counter
+    uid_counter += 1
+    return {'uid': uid_counter - 1}
 
 
 @app.route('/upload_picture/', methods=['POST'])
@@ -112,18 +112,17 @@ def preferences():
         print(pairs_data)
         return f'Data received: {pairs_data}'
     return render_template('forms-test.html', form=form)
-        # p1index = request.form.get('name1')
-        # p2index = request.form.get('name2')
-        # preference = request.form.get('preference')
-        # print(p1index, " ", p2index, " ", preference)
-        # if p1index == p2index:
-        #     return render_template('addCons.html', names=names_dict.values(), error="Please select two diffrent names")
-        # else:
-        #     isLike = 'like' == preference
-        #     updatePersonsMatrix(person_matrix, p1index, p2index, isLike)
-        #     if 'done' in request.form:
-        #         findSitting(THE_TABLE, person_matrix)
-
+    # p1index = request.form.get('name1')
+    # p2index = request.form.get('name2')
+    # preference = request.form.get('preference')
+    # print(p1index, " ", p2index, " ", preference)
+    # if p1index == p2index:
+    #     return render_template('addCons.html', names=names_dict.values(), error="Please select two diffrent names")
+    # else:
+    #     isLike = 'like' == preference
+    #     updatePersonsMatrix(person_matrix, p1index, p2index, isLike)
+    #     if 'done' in request.form:
+    #         findSitting(THE_TABLE, person_matrix)
 
 
 def main():
