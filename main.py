@@ -71,6 +71,7 @@ def add_names():
             if len(names_dict) + 1 > len(THE_TABLE.spots):
                 print("there are to many guests for this table")
                 names_dict.clear()
+                names_counter = 0
                 return redirect('/add_names/', 301)
             names_dict[names_counter] = name  # Add name to dictionary
             print(f"Name added: {name}")
