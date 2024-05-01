@@ -1,6 +1,6 @@
 import math
 import cv2
-from PlateDetector import PlateDetector
+from actions.identifiers.PlateDetector import PlateDetector
 from Spot import Spot
 from collections import defaultdict
 
