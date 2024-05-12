@@ -1,0 +1,124 @@
+<!--=======================================================================================================-->
+<!--=                         Start of page content                                                       =-->
+<!--=======================================================================================================-->
+
+<h2 align="center"> <em> Table Orgenizer </em> </h2>
+<p align="center"> Final project by </p>
+<p align="center"> <b> Uri Ziv, Michal Shechter, Nadav Sananes </b> </p>
+<p align="center"> <a href="mailto:" class="course">shemicha@post.bgu.ac.il,  zivur@post.bgu.ac.il  </a> </p>
+
+<hr>
+
+<h3 align="left"> Introduction </h3>
+<p align="justify">
+    Organizing seating arrangements for a big family dinner, large business meeting or other occasions often becomes a time consuming and complicated task.
+    Each guest has prefrences for who they would like to sit next to or to keep a distance from.<br>
+    
+    In this project we will write a program that allows users to upload a photo of a table with only plates on top. 
+    After the program analyzes the layout of the table, users can provide constrains, who would sit together or apart.
+    The program will then generate a seating chart, a picture of the table with names arranged according to the program output.
+    This picture can be shared with guests before they arrive.
+</p>
+
+<h3 align="left"> Approach and Method</h3>
+<p align="justify">
+    We choose to implement our idea using 2 main consepts from the course: edge detection and label relaxtion.<br>
+    first using edge detection we will analyze the table's seat layout and after we will use label relaxtion to compete the best seating chart givien the constrains.
+</p>
+
+<h4 align="left"> Plates recognition</h4>
+<p align="justify">
+    In order to seat the guests around the table, we first need to understand the table's structure (how many seats are there, which seats are near each other, and which are across one another).
+W   e created a dining plate detector to understand the table's structure. After receiving an image of the table, we apply Gaussian Blur and thresholding to remove anything that isn’t the white plates.
+    After that, we use Canny's edge detector and a dilation function to emphasize the edges in the image. We use cv2.findContours() to get a list of all the contours in the processed edge map.
+    The contours are then filtered by area, circularity and the number of sides of their approximating polygon (min. 5). The detected contours are counted as plates, and a Spot object is created for each one.
+
+</p>
+
+<h4 align="left">Table's seat layout</h4>
+<p align="justify">
+    A Table object is constructed using the spots created at the previous stage. We calculate the relations between the spots and write the results in a relations weighted graph. 
+    For each Spot, the top 2 nearest spots are considered as the spots right next to it at the table.
+    If 2 spots' x or y coordinates are within epsilon of each other, and the distance between them is close enough, we consider them to be across each other, and give them a smaller weight on the graph. That way, spots next to each other get more attention than spots across each other, but they are still taken into consideration.
+
+</p>
+
+<h4 align="left">receiving constarins & Label relaxtion</h4>
+<p align="justify">
+    In order to apply label relaxtion in our project we had to establish four key components: <br>
+    1. labels: The labels in our program represent the guests, identified by their index numbers.<br>
+    2. objects: The objects are the spots around the table where guests will sit. <br>
+    3. Compatibility function: We designed compatibility matrix, 'personMatrix', of size n*n where n is the number of spots around the table.<br>
+    Each cell (i,j) in the matrix represent the relationship between person i and person j.<br> if the two people want to sit next to each other 'personMatrix[i][j] = personMatrix[j][i] = 1'. if they prefer to sit apart 'personMatrix[i][j] = personMatrix[j][i] = 0'.
+    in cases where their prefernence is neutral or undefined (i=j) we assign 0.5. <br>
+    We also created a second matrix, 'prMatrix', to represent the initial probability that a particular guest will sit in a given spot. <br>
+    This information, along with the connections between spots obtained from the table structure, forms the basis of our compatibility function.<br>
+    4. inital probabilities: When creating a guest list for a dinner party, people often write the names in a somewhat ordered fashion, 
+    which can serve as a basis for initial probabilities. <br>
+    The first spot on the table has the highest probability of hosting the first person entered into the program, and the rest are proportioned so that their total probabilities sum to 1.<br>
+    Continuing this pattern for all the spots, where for spot i the highest probability of hosting the i person entered into the program. <br>
+
+    Additionally, we had to modify the label relaxation process to ensure each spot is assigned a unique label. <br>
+    In traditional label relaxation, multiple objects can share the same label, but in our context, each label represents a unique guest, and each spot can hold only one guest. <br>
+    To address this, we introduced two safeguards. Firstly, in the compatibility function, we ensure that the compatibility of to spots getting the same label is zero. <br>
+    Secondly, after the relaxation process, we perform a final check to confirm that each label is unique to prevent any overlapping assignments.
+</p>
+
+<h3 align="left"> Results</h3>
+<p align="justify">
+    After running the program the user will recive a photo of his table he provided in the beggining and on top the names in the order the program found to be the optimal sitting order.
+    if the user entered less names then spots we identified the program will mention this is an empty sit
+
+</p>
+
+<h3 align="left"> Project's Video</h3>
+<i>Do not touch. Here your project's video clip will be embedded by us...</i>
+<p align="justify">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/LYcXAEZfQFY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+</p>
+
+<h3 align="left"> Conclusions</h3>
+<p align="justify">
+    In many instances, we successfully identified the plates and provided the user with an organized table layout. 
+    However, we encountered some challenges in the following scenarios:<br>
+    <ul>
+        <li>When the plates were darker, or the table/background was lighter, 
+            this contrast mismatch made it difficult to identify the plates accurately.</li>
+        <li>Uneven lighting also created issues, 
+                as some areas were overexposed while others were underexposed, leading to inconsistent detection.</li>
+    </ul>
+    <br>
+    To address these challenges, we plan to improve our program's recognition accuracy by:<br>
+    <ul>
+        <li>Enhancing our image processing algorithms to better handle variations in lighting and contrast.</li>
+        <li>Expanding our recognition capabilities to support a wider range of plate colors, ensuring greater flexibility in diverse settings. </li>
+    </ul>
+    <br>
+    By implementing these enhancements, we aim to increase the robustness of our program, making it more reliable in various conditions and improving the user experience.
+
+</p>
+
+<h3 align="left"> Additional Information</h3>
+<p align="justify">
+</p>
+<ul>
+    <li> Full project report (<a href="./ICBV241-17-projectdoc.pdf" class="course">PDF</a>).
+    </li>
+    <li> Oral presentation slides (<a href="./ICBV241-17-presention.pptx" class="course">ppt</a> , <a href="./ICBV241-17-presention.pdf" class="course">PDF</a>).
+    </li>
+    <li> Project's video file (<a href="https://drive.google.com/file/d/1lwI9Jd5KohOmzKLE8uO_dtXIlDhe6lqm/view?usp=drive_link" class="course">video_file</a>).
+    </li>
+    <li> <a href="./ICBV241-17-sourceCodeForDownload.zip" class="course">Downloadable source code</a>.
+    </li>
+</ul>
+<p></p>
+
+<h3 align="left"> References </h3>
+<p align="justify">
+    Cvzone - Money/Coin Counter using Computer Vision - https://youtu.be/-iN7NDbDz3Q?si=TlaNaGBcWH1cW4t0
+</p>
+
+<!--=======================================================================================================-->
+<!--=                         End of page content                                                       =-->
+<!--=======================================================================================================-->
+<notoc></notoc>
